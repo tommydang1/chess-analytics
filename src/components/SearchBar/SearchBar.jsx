@@ -22,29 +22,19 @@ const SearchBar = ({ setResults }) => {
     );
   }, [search]);
 
-  const fetchPlayerData = async (value) => {
-    let response = null;
-    if (search !== "") {
-      try {
-        response = await fetch(`https://api.chess.com/pub/player/${value}`);
-      } catch (e) {
-        console.log(`Player ${search} not found!`);
-      }
-      if (response !== null && response.status == 200) {
-        const parseResponse = await response.json();
-        setResults(["Player", parseResponse]);
-      } else {
-        console.log(`Player ${search} not found!`);
-      }
-    }
-  };
-
   const handleChange = (value) => {
     setSearch(value);
   };
 
   const handlePlayerSubmit = () => {
-    fetchPlayerData(search);
+    if (
+      searchSuggestions.length &&
+      search.toLowerCase() === searchSuggestions[0].toLowerCase()
+    ) {
+      handleOpeningSubmit(searchSuggestions[0]);
+    } else {
+      setResults(["Player", search]);
+    }
   };
 
   const handleOpeningSubmit = (item) => {
@@ -59,7 +49,7 @@ const SearchBar = ({ setResults }) => {
         handlePlayerSubmit();
       }
     }
-    if (e.key === "ArrowUp" && selectedSearch > 0) {
+    if (e.key === "ArrowUp" && selectedSearch > -1) {
       setSelectedSearch((prev) => prev - 1);
     }
     if (

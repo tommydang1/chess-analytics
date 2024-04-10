@@ -1,19 +1,21 @@
-import { useState } from "react";
-import "./App.css";
+import React from "react";
 
-import SearchBar from "./components/SearchBar/SearchBar";
-import SearchResultsList from "./components/SearchResultsList/SearchResultsList";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home/Home";
+import Profile from "./pages/Profile/Profile";
+import Opening from "./pages/Opening/Opening";
+import NotFound from "./pages/NotFound/NotFound";
 
 function App() {
-  const [results, setResults] = useState([]);
-
   return (
-    <div className="App">
-      <div className="search-bar-container">
-        <SearchBar setResults={setResults} />
-        <SearchResultsList results={results} />
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/profile/:userName" element={<Profile />} />
+        <Route path="/opening/:openingName" element={<Opening />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
